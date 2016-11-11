@@ -1,0 +1,48 @@
+<html>
+    <h1>Applications</h1>
+    <ul id="app-list"></ul>
+    <script>
+        var listElement = document.getElementById('app-list');
+
+        function createListItem(app) {
+            var titleDiv = document.createElement("DIV");
+            var containerDiv = document.createElement("DIV");
+            var descriptionDiv = document.createElement("DIV");
+            var titleLink = document.createElement("A");
+
+            titleDiv.setAttribute("class", "title")
+            descriptionDiv.setAttribute("class", "description")
+            containerDiv.setAttribute("class", "container")
+            titleLink.setAttribute("href", app.trackViewUrl)
+
+            titleLink.innerText = app.trackName;
+            descriptionDiv.innerText = app.description;
+
+            titleDiv.appendChild(titleLink);
+            containerDiv.appendChild(titleDiv);
+            containerDiv.appendChild(descriptionDiv);
+            listElement.appendChild(containerDiv);
+        }
+
+        function createList(apps) {
+            appList = apps.results;
+            appList.forEach(function(app) {
+                createListItem(app);
+            });
+        }
+
+        function requestUrl(request) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    var appList = JSON.parse(xmlHttp.responseText)
+                    createList(appList)
+            }
+            xmlHttp.open("GET", baseUrl + '?' + request, true); // true for asynchronous 
+            xmlHttp.send(null);
+        }
+        
+        var baseUrl = 'http://itunes.apple.com/search';
+        requestUrl("%s");
+    </script>
+</html>
