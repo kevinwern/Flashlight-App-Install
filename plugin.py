@@ -10,7 +10,8 @@ def results(fields, original_query):
         "title": "Install apps: '{0}'".format(message),
         "run_args": [message],
         "html" : html % (query_string),
-        "webview_links_open_in_browser" : True
+        "webview_links_open_in_browser" : True,
+        "webview_transparent_background" : True
     }
 
 def run(message):
