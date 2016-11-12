@@ -1,48 +1,105 @@
 <html>
-    <h1>Applications</h1>
-    <ul id="app-list"></ul>
-    <script>
-        var listElement = document.getElementById('app-list');
-
-        function createListItem(app) {
-            var titleDiv = document.createElement("DIV");
-            var containerDiv = document.createElement("DIV");
-            var descriptionDiv = document.createElement("DIV");
-            var titleLink = document.createElement("A");
-
-            titleDiv.setAttribute("class", "title")
-            descriptionDiv.setAttribute("class", "description")
-            containerDiv.setAttribute("class", "container")
-            titleLink.setAttribute("href", app.trackViewUrl)
-
-            titleLink.innerText = app.trackName;
-            descriptionDiv.innerText = app.description;
-
-            titleDiv.appendChild(titleLink);
-            containerDiv.appendChild(titleDiv);
-            containerDiv.appendChild(descriptionDiv);
-            listElement.appendChild(containerDiv);
-        }
-
-        function createList(apps) {
-            appList = apps.results;
-            appList.forEach(function(app) {
-                createListItem(app);
-            });
-        }
-
-        function requestUrl(request) {
-            var xmlHttp = new XMLHttpRequest();
-            xmlHttp.onreadystatechange = function() { 
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                    var appList = JSON.parse(xmlHttp.responseText)
-                    createList(appList)
+    <body>
+        <style>
+            body{
+                padding: 10px 12px;
+                font: 15px/1.4 'Helvetica Neue';
+                font-weight: 300;
+                /*-webkit-user-select: none;*/
             }
-            xmlHttp.open("GET", baseUrl + '?' + request, true); // true for asynchronous 
-            xmlHttp.send(null);
-        }
-        
-        var baseUrl = 'http://itunes.apple.com/search';
-        requestUrl("%s");
-    </script>
+            h1 {
+                font-size: 20px;
+                font-weight: 300;
+            }
+            .title {
+                font-size: 11px;
+                -webkit-user-select: all;
+                margin: 0 auto;
+            }
+            .title-text {
+                display: -webkit-box;
+                -webkit-user-select: all;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-align: center;
+            }
+            #app-list {
+                display: block;
+            }
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+            .container {
+                display: inline-block;
+                width: 70px;
+                float: left;
+                padding: 5px;
+            }
+            .container-row {
+                clear: both;
+            }
+        </style>
+
+        <h1>Applications</h1>
+        <div id="app-list"></div>
+        <script>
+            var listElement = document.getElementById('app-list');
+            var lastRow = null;
+
+            function createListItem(app) {
+                 if (lastRow == null ||  lastRow.childElementCount %% 4 == 0) {
+                    lastRow = document.createElement("DIV");
+                    lastRow.setAttribute("class", "container-row");
+                    listElement.appendChild(lastRow);
+                }
+                var titleDiv = document.createElement("DIV");
+                var containerDiv = document.createElement("DIV");
+                var descriptionDiv = document.createElement("DIV");
+                var imgElement = document.createElement("IMG");
+                var containerLink = document.createElement("A");
+                var title = document.createElement("DIV");
+
+                titleDiv.setAttribute("class", "title")
+                title.setAttribute("class", "title-text")
+                descriptionDiv.setAttribute("class", "description")
+                descriptionDiv.setAttribute("hidden", "true")
+                containerDiv.setAttribute("class", "container")
+                containerLink.setAttribute("href", app.trackViewUrl)
+                imgElement.setAttribute("src", app.artworkUrl60)
+                imgElement.setAttribute("align", "middle")
+
+                title.innerText = app.trackName
+                descriptionDiv.innerText = app.description
+
+                containerDiv.appendChild(imgElement);
+                containerDiv.appendChild(title);
+                containerDiv.appendChild(descriptionDiv);
+                containerLink.appendChild(containerDiv);
+                lastRow.appendChild(containerLink);
+            }
+
+            function createList(apps) {
+                appList = apps.results;
+                appList.forEach(function(app) {
+                    createListItem(app);
+                });
+            }
+
+            function requestUrl(request) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function() {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                        var appList = JSON.parse(xmlHttp.responseText)
+                        createList(appList)
+                }
+                xmlHttp.open("GET", baseUrl + '?' + request, true);
+                xmlHttp.send(null);
+            }
+
+            var baseUrl = 'http://itunes.apple.com/search';
+            requestUrl("%s");
+        </script>
+    </body>
 </html>
