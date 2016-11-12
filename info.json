@@ -2,7 +2,7 @@
     "name": "app-install-hint",
     "displayName": "App Install Hints",
     "description": "Displays apps to install",
-    "examples": ["appget itunes", "appget fdsa"],
+    "examples": ["appget itunes", "appget ____"],
     "categories": ["Utilities"],
     "creator_name": "Kevin Wern",
     "creator_url": "http://github.com/kevinwern"
