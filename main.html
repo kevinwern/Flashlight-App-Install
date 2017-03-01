@@ -66,7 +66,7 @@
                 descriptionDiv.setAttribute("class", "description")
                 descriptionDiv.setAttribute("hidden", "true")
                 containerDiv.setAttribute("class", "container")
-                containerLink.setAttribute("href", app.trackViewUrl)
+                containerLink.setAttribute("href", app.trackViewUrl.replace(/https:\/\//, 'macappstores://'))
                 imgElement.setAttribute("src", app.artworkUrl60)
                 imgElement.setAttribute("align", "middle")
 
